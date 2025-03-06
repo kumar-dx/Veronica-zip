@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download Veronica</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #f3f4f6; }
+        .card { background: white; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); }
+        .dropdown { display: none; opacity: 0; transform: translateY(-10px); transition: all 0.2s ease-in-out; }
+        .dropdown.show { display: block; opacity: 1; transform: translateY(0); }
+    </style>
+    <script>
+        async function fetchVersion() {
+            const response = await fetch('/version');
+            const data = await response.json();
+            document.getElementById("version").innerText = "Version: " + data.version;
+        }
+
+        async function fetchStores() {
+            const response = await fetch('/stores');
+            const stores = await response.json();
+            const dropdown = document.getElementById("dropdown");
+
+            stores.forEach(store => {
+                const storeOption = document.createElement("button");
+                storeOption.innerText = `${store.name} (ID: ${store.id})`;
+                storeOption.className = "block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 transition";
+                storeOption.onclick = () => downloadZip(store.id);
+                dropdown.appendChild(storeOption);
+            });
+        }
+
+        function toggleDropdown() {
+            const dropdown = document.getElementById("dropdown");
+            dropdown.classList.toggle("show");
+        }
+
+        function closeDropdown(event) {
+            const dropdown = document.getElementById("dropdown");
+            if (!event.target.closest("#dropdown-container")) {
+                dropdown.classList.remove("show");
+            }
+        }
+
+        function downloadZip(storeId) {
+            window.location.href = `/download/${storeId}`;
+            document.getElementById("dropdown").classList.remove("show");
+        }
+
+        window.onload = () => {
+            fetchVersion();
+            fetchStores();
+            document.addEventListener("click", closeDropdown);
+        };
+    </script>
+</head>
+<body class="flex items-center justify-center h-screen">
+    <div class="card p-6 rounded-lg text-center w-96">
+        <img src="./logo.png" alt="drive logo" class="m-auto mb-5"/>
+        <h1 class="text-2xl font-bold text-gray-800">Welcome to Veronica</h1>
+        <p id="version" class="text-gray-600 mt-2">Loading version...</p>
+
+        <div id="dropdown-container" class="relative mt-4 w-full">
+            <button onclick="toggleDropdown()" class="bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition w-full font-semibold">
+                Download
+            </button>
+            <div id="dropdown" class="dropdown absolute w-full bg-white shadow-lg rounded-md mt-2 border overflow-hidden z-10">
+                <!-- Store options will be added here dynamically -->
+            </div>
+        </div>
+    </div>
+</body>
+</html>

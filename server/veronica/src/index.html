@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Veronica | DriveX</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- Material Icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <!-- Material UI Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+</head>
+<body>
+    <div id="root">
+        <!-- Row 1: Header Section -->
+        <header class="app-header">
+            <div class="header-left">
+                <img src="../assets/logo.png" alt="DriveX Logo" class="logo">
+            </div>
+            <div class="header-center">
+                <div class="store-name">Store ID : ID ( Store Name : Name )</div>
+            </div>
+            <div class="header-right">
+                <div class="system-status">
+                    System Online
+                </div>
+                <div class="user-profile">
+                    <span class="material-icons">account_circle</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Row 2: Process Status Section -->
+        <div class="process-status">
+            <div class="status-header">
+                <h2>Process Status</h2>
+            </div>
+            <div class="progress-tracker">
+                <div class="progress-step" data-step="1">
+                    <div class="step-icon">
+                        <span class="material-icons">person_search</span>
+                    </div>
+                    <div class="step-label">Detecting Visitors</div>
+                </div>
+                <div class="progress-step" data-step="2">
+                    <div class="step-icon">
+                        <span class="material-icons">face</span>
+                    </div>
+                    <div class="step-label">Recognizing Faces</div>
+                </div>
+                <div class="progress-step" data-step="3">
+                    <div class="step-icon">
+                        <span class="material-icons">insights</span>
+                    </div>
+                    <div class="step-label">Storing Insights</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 3: Two Column Layout -->
+        <div class="main-content">
+            <!-- Column 1: Video Stream Section -->
+            <div class="stream-container">
+                <div class="stream-header">
+                    <h2>Live Camera Feed</h2>
+                    <div class="stream-controls">
+                        <button class="icon-button" title="Fullscreen">
+                            <span class="material-icons">fullscreen</span>
+                        </button>
+                        <button class="icon-button" title="Settings">
+                            <span class="material-icons">settings</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="video-feed">
+                    <div class="start-prompt">
+                        Please click on Start button to track visitors on the store
+                    </div>
+                </div>
+                <div class="stream-footer">
+                    <div class="stream-stats">
+                        <div class="stat-item">
+                            <span class="material-icons">speed</span>
+                            <span id="fps-counter">0 FPS</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="material-icons">timer</span>
+                            <span id="runtime-counter">00:00:00</span>
+                        </div>
+                    </div>
+                    <button id="control-button" class="start-button">
+                        <span class="material-icons">play_arrow</span>
+                        Start
+                    </button>
+                </div>
+            </div>
+
+            <!-- Column 2: Analytics Overview Section -->
+            <div class="analytics-panel">
+                <div class="analytics-header">
+                    <h2>Analytics Overview</h2>
+                </div>
+                <div class="analytics-content">
+                    <div class="stat-card">
+                        <div class="stat-title">Today's Date</div>
+                        <div class="stat-value" id="current-date-value">19 February 2025</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-title">Total Visitors Today</div>
+                        <div class="stat-value" id="visitor-count">-</div>
+                        <button id="fetch-count" class="refresh-button">
+                            <span class="material-icons">refresh</span>
+                        </button>
+                    </div>
+                    <button id="check-history" class="history-button">
+                        <span class="material-icons">history</span>
+                        Check History
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Camera Configuration</h2>
+                <button class="close-button">
+                    <span class="material-icons">close</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="camera-config-form">
+                    <div style="display: grid; gap: 16px;">
+                        <div style="display: grid; gap: 8px;">
+                            <label for="camera-ip">Camera IP</label>
+                            <input type="text" id="camera-ip" required placeholder="192.168.0.193" style="padding: 8px; border-radius: 8px; border: 1px solid var(--border-color);">
+                        </div>
+                        <div style="display: grid; gap: 8px;">
+                            <label for="rtsp-port">RTSP Port</label>
+                            <input type="text" id="rtsp-port" required placeholder="554" style="padding: 8px; border-radius: 8px; border: 1px solid var(--border-color);">
+                        </div>
+                        <div style="display: grid; gap: 8px;">
+                            <label for="username">Username</label>
+                            <input type="text" id="username" required placeholder="admin" style="padding: 8px; border-radius: 8px; border: 1px solid var(--border-color);">
+                        </div>
+                        <div style="display: grid; gap: 8px;">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" required placeholder="••••••" style="padding: 8px; border-radius: 8px; border: 1px solid var(--border-color);">
+                        </div>
+                        <div style="display: grid; gap: 8px;">
+                            <label for="main-stream">Main Stream Path</label>
+                            <input type="text" id="main-stream" required placeholder="/ch05/0" style="padding: 8px; border-radius: 8px; border: 1px solid var(--border-color);">
+                        </div>
+                        <div style="display: grid; gap: 8px;">
+                            <label for="sub-stream">Sub Stream Path</label>
+                            <input type="text" id="sub-stream" required placeholder="/ch05/1" style="padding: 8px; border-radius: 8px; border: 1px solid var(--border-color);">
+                        </div>
+                        <div style="display: grid; gap: 8px;">
+                            <label for="max-retries">Max Retries</label>
+                            <input type="number" id="max-retries" required value="3" min="1" style="padding: 8px; border-radius: 8px; border: 1px solid var(--border-color);">
+                        </div>
+                        <div style="display: grid; gap: 8px;">
+                            <label for="retry-delay">Retry Delay (seconds)</label>
+                            <input type="number" id="retry-delay" required value="5" min="1" style="padding: 8px; border-radius: 8px; border: 1px solid var(--border-color);">
+                        </div>
+                        <div style="display: grid; gap: 8px;">
+                            <label for="rtsp-options">RTSP Environment Options</label>
+                            <input type="text" id="rtsp-options" required value="rtsp_transport=tcp|max_delay=500000" style="padding: 8px; border-radius: 8px; border: 1px solid var(--border-color);">
+                        </div>
+                        <button type="submit" class="primary-button" style="margin-top: 8px;">
+                            <span class="material-icons">save</span>
+                            Save Configuration
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- History Modal -->
+    <div id="history-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Visitor History</h2>
+                <button class="close-button">
+                    <span class="material-icons">close</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="date-selector">
+                    <label for="history-date">Select Date:</label>
+                    <input type="date" id="history-date">
+                    <button id="fetch-history" class="primary-button">
+                        <span class="material-icons">search</span>
+                        View Metrics
+                    </button>
+                </div>
+                <div class="metrics-display">
+                    <div class="metric-card">
+                        <div class="metric-title">Total Visitors</div>
+                        <div class="metric-value" id="history-visitor-count">-</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="renderer.js"></script>
+</body>
+</html>
